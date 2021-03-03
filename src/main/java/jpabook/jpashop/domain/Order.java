@@ -1,5 +1,6 @@
 package jpabook.jpashop.domain;
 
+import jpabook.jpashop.domain.item.Item;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.util.Lazy;
@@ -41,7 +42,7 @@ public class Order {
         member.getOrders().add(this);
     }
 
-    public void addOrderItem(OrderItem orderItem) {
+    public void addOrderItem(Item orderItem) {
         orderItems.add(orderItem);
         orderItem.setOrder(this);
     }
