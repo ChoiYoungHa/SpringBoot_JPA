@@ -18,7 +18,7 @@ public class Order {
 
     @Id @GeneratedValue
     @Column(name = "order_id")
-    private Long order_id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -42,15 +42,56 @@ public class Order {
         member.getOrders().add(this);
     }
 
-    public void addOrderItem(Item orderItem) {
+    public void addOrderItem(OrderItem orderItem) {
         orderItems.add(orderItem);
         orderItem.setOrder(this);
     }
 
-    public void SetDelivery(Delivery delivery) {
+    public void setDelivery(Delivery delivery) {
         this.delivery = delivery;
         delivery.setOrder(this);
 
     }
+
+    //== 생성 매서드 ==// 앞으로 생성할때 문제가 생기면 요것만 바꾸면 되기에 이렇게 사용
+    public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
+        Order order = new Order();
+        order.setMember(member);
+        order.setDelivery(delivery);
+        for (OrderItem orderItem : orderItems) {
+            order.addOrderItem(orderItem);
+        }
+        order.setStates(OrderStates.ORDER);
+        order.setOrderDate(LocalDateTime.now());
+        return order;
+    }
+    //== 비지니스 로직 ==/
+    /**
+     * 주문 취소
+     */
+    public void canCle(){
+        if (delivery.getStates() == DeliveryStatus.COMP) {
+            throw new IllegalStateException("이미 배송이 완료된 상품은 취소가 불가능 합니다.");
+        }
+
+        this.setStates(OrderStates.CANCEL);
+        for (OrderItem orderItem : orderItems) {
+            orderItem.cancel();
+        }
+    }
+
+    //==조회 로직==//
+    /*
+    전체 주문 가격 조회
+     */
+    public int getTotalPrice() {
+        int totalPrice = 0;
+        for (OrderItem orderItem : orderItems) {
+            totalPrice += orderItem.getTotalPrice();
+        }
+        return totalPrice;
+    }
+
+
 
 }

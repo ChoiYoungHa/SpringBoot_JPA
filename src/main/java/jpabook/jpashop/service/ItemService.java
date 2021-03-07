@@ -33,18 +33,9 @@ public class ItemService {
         return itemRepository.findOne(id);
     }
 
-    //주문 생성 메서드까지 함.
-    public static Order createOrder(Member member, Delivery delivery, Item... items) {
-        Order order = new Order();
-        order.setMember(member);
-        order.SetDelivery(delivery);
-        for (Item item : items) {
-            order.addOrderItem(item);
-        }
-        order.setStates(OrderStates.ORDER);
-        order.setOrderDate(LocalDateTime.now());
-        return order;
-    }
+
+
+
 
 
 
