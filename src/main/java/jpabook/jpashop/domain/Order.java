@@ -58,7 +58,7 @@ public class Order {
         Order order = new Order();
         order.setMember(member);
         order.setDelivery(delivery);
-        for (OrderItem orderItem : orderItems) {
+        for (OrderItem orderItem : orderItems) { // 주문을 생성자로 받아서 order 객체에 추가
             order.addOrderItem(orderItem);
         }
         order.setStates(OrderStates.ORDER);
